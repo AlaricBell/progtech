@@ -3,29 +3,29 @@ package model;
 import model.Coffee;
 
 public abstract class AddonDecorator extends Coffee {
-    protected Coffee coffee;
+    protected Coffee coffeeType;
 
     public AddonDecorator(Coffee coffee) {
-        this.coffee = coffee;
+        this.coffeeType = coffee;
     }
 
     @Override
     public double getCost() {
-        return coffee.getCost();
+        return coffeeType.getCost();
     }
 
     @Override
     public void setCost(double cost) {
-        coffee.setCost(cost);
+        coffeeType.setCost(cost);
     }
 
     @Override
     public String getDescription() {
-        return coffee.getDescription();
+        return coffeeType.getDescription();
     }
 
     @Override
     public void setDescription(String description) {
-        coffee.setDescription(description);
+        coffeeType.setDescription(description);
     }
 }
