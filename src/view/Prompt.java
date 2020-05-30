@@ -1,11 +1,12 @@
 package view;
 
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class Prompt {
     private Scanner scanner = new Scanner(System.in);
     public String promptOptions = "*************** Coffee Storage App ***************\n"
-                                + "1. Order\n2. Fill Storage\n";
+                                + "1. Order\n2. Fill Storage\n3. Show Storage\nq. Quit";
     public String promptOrderOptions1 = "Enter the number of the drink you'd like to order.\n"
                                  + "1. Espresso\n2. Latte\n3. Macchiato\n4. Cappuccino\n";
     public String promptOrderOptions2 = "Do you want additional flavours? (y/n)";
