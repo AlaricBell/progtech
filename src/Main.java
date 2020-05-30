@@ -1,15 +1,23 @@
+import controller.StorageController;
+import factory.CoffeeFactory;
 import model.Coffee;
 import model.Storage;
 import model.addons.*;
 import model.coffees.*;
+import view.Prompt;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Storage s = Storage.getStorageInstance();
 
-        s.add(new Latte());
-        s.add(new Latte());
-        s.add(new Espresso());
-        System.out.println(s.getQuantityAllByType());
+        StorageController storageController = new StorageController();
+        Prompt prompter = new Prompt();
+        try {
+            storageController.handleUserInput();
+        } catch (Exception e) {
+            prompter.promptOutput(e.getMessage());
+        }
     }
 }
