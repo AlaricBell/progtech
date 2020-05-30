@@ -69,7 +69,7 @@ public class StorageController implements ISubject {
     }
 
     public void notifyObserver(Coffee coffeeType, double price) throws Exception {
-        for (Coffee coffee : storage.GetFilteredCoffeesByType(coffeeType)) {
+        for (Coffee coffee : storage.getFilteredCoffeesByType(coffeeType)) {
             coffee.update(price);
         }
         throw new Exception("Price of " + coffeeType.getClass().getSimpleName() +  " is set to " + price);

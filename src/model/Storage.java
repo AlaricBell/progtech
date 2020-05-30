@@ -24,6 +24,11 @@ public class Storage {
         return firstInstance;
     }
 
+    // Implemented a delete instance for unit test purposes since this class is a singleton
+    public static void deleteStorageInstance() {
+        firstInstance = null;
+    }
+
     public void add(Coffee coffee) throws Exception {
         if (validateQuantity(coffee)) {
             coffeeStorage.add(coffee);
@@ -39,7 +44,7 @@ public class Storage {
             throw new Exception("We ran out of this type of coffee.");
         }
     }
-    // TUTI LEHET ROVIDEBBEN, AZONBAN AZ INSTANCEOF-NAL NEM SIKERULT ALTALANOSITANI A CLASST..
+
     public String getQuantityAllByType() {
         String temp = "Espresso: ";
         temp += Long.toString(coffeeStorage.stream().filter(coffee -> coffee instanceof Espresso).count()) + "\n";
@@ -128,7 +133,7 @@ public class Storage {
         return orderedCoffee;
     }
 
-    public ArrayList<Coffee> GetFilteredCoffeesByType(Coffee coffee) throws Exception{
+    public ArrayList<Coffee> getFilteredCoffeesByType(Coffee coffee) throws Exception{
         if(!coffeeStorage.isEmpty()) {
             if (coffee instanceof Espresso) {
                 return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof Espresso).collect(Collectors.toList()));

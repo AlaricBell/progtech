@@ -12,7 +12,7 @@ import java.util.List;
 public class Main {
     public static void main(String[] args) {
 
-        StorageController storageController = new StorageController();
+        /*StorageController storageController = new StorageController();
         Prompt prompter = new Prompt();
 
         storageController.seedStorage();
@@ -23,6 +23,6 @@ public class Main {
             } catch (Exception e) {
                 prompter.promptOutput(e.getMessage());
             }
-        } while(true);
+        } while(true);*/
     }
 }
