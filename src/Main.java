@@ -14,10 +14,15 @@ public class Main {
 
         StorageController storageController = new StorageController();
         Prompt prompter = new Prompt();
-        try {
-            storageController.handleUserInput();
-        } catch (Exception e) {
-            prompter.promptOutput(e.getMessage());
-        }
+
+        storageController.seedStorage();
+
+        do {
+            try {
+                storageController.handleUserInput();
+            } catch (Exception e) {
+                prompter.promptOutput(e.getMessage());
+            }
+        } while(true);
     }
 }

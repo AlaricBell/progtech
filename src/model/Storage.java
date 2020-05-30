@@ -7,6 +7,7 @@ import model.coffees.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Storage {
     private static Storage firstInstance = null;
@@ -125,6 +126,30 @@ public class Storage {
             throw new Exception("No coffee of this type present!");
         }
         return orderedCoffee;
+    }
+
+    public ArrayList<Coffee> GetFilteredCoffeesByType(Coffee coffee) throws Exception{
+        if(!coffeeStorage.isEmpty()) {
+            if (coffee instanceof Espresso) {
+                return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof Espresso).collect(Collectors.toList()));
+            } else if (coffee instanceof Latte) {
+                return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof Latte).collect(Collectors.toList()));
+            } else if (coffee instanceof Macchiato) {
+                return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof Macchiato).collect(Collectors.toList()));
+            } else if (coffee instanceof Cappuccino) {
+                return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof Cappuccino).collect(Collectors.toList()));
+            } else if (coffee instanceof VanillaFlavour) {
+                return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof VanillaFlavour).collect(Collectors.toList()));
+            } else if (coffee instanceof CaramelFlavour) {
+                return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof CaramelFlavour).collect(Collectors.toList()));
+            } else if (coffee instanceof ChocolateFlavour) {
+                return new ArrayList<Coffee>(coffeeStorage.stream().filter(c -> c instanceof ChocolateFlavour).collect(Collectors.toList()));
+            } else {
+                throw new Exception("Invalid parameter value in Storage.GetFilteredCoffeesByType");
+            }
+        } else {
+            throw new Exception("Storage is empty");
+        }
     }
 
     public void fillStorageByType(Coffee coffee) {

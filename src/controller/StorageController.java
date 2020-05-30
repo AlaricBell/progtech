@@ -1,13 +1,15 @@
 package controller;
 
+import com.sun.tools.javac.Main;
 import factory.CoffeeFactory;
+import interfaces.ISubject;
 import model.Coffee;
 import model.Storage;
 import view.Prompt;
 
 import java.text.DecimalFormat;
 
-public class StorageController {
+public class StorageController implements ISubject {
     private static Storage storage;
     private Prompt prompter;
 
@@ -16,9 +18,14 @@ public class StorageController {
         prompter = new Prompt();
     }
 
+    public void seedStorage() {
+        fillStorageByType("Espresso", null);
+        fillStorageByType("Latte", null);
+        fillStorageByType("Macchiato", null);
+        fillStorageByType("Cappuccino", null);
+    }
+
     public void handleUserInput() throws Exception {
-        boolean quit = false;
-        do {
             String order = prompter.getUserInput(prompter.promptOptions);
             String coffeeType;
             String flavour;
@@ -31,27 +38,41 @@ public class StorageController {
                 case "2":
                     coffeeType = chooseCoffeeType();
                     flavour = chooseFlavour();
-                    storage.fillStorageByType(CoffeeFactory.makeCoffee(coffeeType, flavour));
+                    fillStorageByType(coffeeType, flavour);
                     break;
                 case "3":
                     prompter.promptOutput(storage.getQuantityAllByType());
                     break;
+                case "4":
+                    coffeeType = chooseCoffeeType();
+                    flavour = chooseFlavour();
+                    double price = Double.parseDouble(prompter.getUserInput(prompter.promptPriceOption));
+                    setPrice(coffeeType, flavour, price);
                 case "q":
-                    quit = true;
+                    System.exit(0);
                     break;
                 default:
                     throw new IllegalArgumentException("Invalid input was given!");
             }
-        } while(!quit);
     }
 
     public void addCoffeeToStorage(String chosenCoffeeType, String chosenFlavour) throws Exception {
-        //String chosenCoffeeType = prompter.getUserInput(prompter.promptOrderOptions1);
         storage.add(makeCoffee(chosenCoffeeType, chosenFlavour));
     }
 
     public void removeCoffeeFromStorage(Coffee orderedCoffee) throws Exception {
         storage.removeCoffeeByType(orderedCoffee);
+    }
+
+    public void fillStorageByType(String coffeeType, String flavour) {
+        storage.fillStorageByType(CoffeeFactory.makeCoffee(coffeeType, flavour));
+    }
+
+    public void notifyObserver(Coffee coffeeType, double price) throws Exception {
+        for (Coffee coffee : storage.GetFilteredCoffeesByType(coffeeType)) {
+            coffee.update(price);
+        }
+        throw new Exception("Price of " + coffeeType.getClass().getSimpleName() +  " is set to " + price);
     }
 
     public Coffee makeCoffee(String chosenCoffeeType, String flavour) throws IllegalArgumentException{
@@ -112,5 +133,10 @@ public class StorageController {
         String response = "Coffee was ordered for: $" + numberFormat.format(coffee.getCost());
         removeCoffeeFromStorage(coffee);
         prompter.promptOutput(response);
+    }
+
+    public void setPrice(String coffeeType, String flavour, double price) throws Exception {
+        Coffee coffee = storage.getCoffeeByType((flavour != null) ? flavour : coffeeType);
+        notifyObserver(coffee, price);
     }
 }
