@@ -13,7 +13,6 @@ public class Main {
     public static void main(String[] args) {
 
         StorageController storageController = new StorageController();
-        Prompt prompter = new Prompt();
 
         storageController.seedStorage();
 
@@ -21,7 +20,7 @@ public class Main {
             try {
                 storageController.handleUserInput();
             } catch (Exception e) {
-                prompter.promptOutput(e.getMessage());
+                Prompt.promptOutput(e.getMessage());
             }
         } while(true);
     }

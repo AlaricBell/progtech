@@ -5,17 +5,19 @@ import factory.CoffeeFactory;
 import interfaces.ISubject;
 import model.Coffee;
 import model.Storage;
-import view.Prompt;
+import view.*;
 
 import java.text.DecimalFormat;
 
 public class StorageController implements ISubject {
     private static Storage storage;
-    private Prompt prompter;
+    private StoragePrompter storagePrompter;
+    private CostPrompter costPrompter;
 
     public StorageController() {
         storage = Storage.getStorageInstance();
-        prompter = new Prompt();
+        storagePrompter = new StoragePrompter();
+        costPrompter = new CostPrompter();
     }
 
     public void seedStorage() {
@@ -26,7 +28,7 @@ public class StorageController implements ISubject {
     }
 
     public void handleUserInput() throws Exception {
-            String order = prompter.getUserInput(prompter.promptOptions);
+            String order = Prompt.getUserInput(storagePrompter.getStorageOptions());
             String coffeeType;
             String flavour;
             switch(order) {
@@ -41,12 +43,12 @@ public class StorageController implements ISubject {
                     fillStorageByType(coffeeType, flavour);
                     break;
                 case "3":
-                    prompter.promptOutput(storage.getQuantityAllByType());
+                    Prompt.promptOutput(storage.getQuantityAllByType());
                     break;
                 case "4":
                     coffeeType = chooseCoffeeType();
                     flavour = chooseFlavour();
-                    double price = Double.parseDouble(prompter.getUserInput(prompter.promptPriceOption));
+                    double price = Double.parseDouble(Prompt.getUserInput(costPrompter.getCostChangeOptions()));
                     setPrice(coffeeType, flavour, price);
                 case "q":
                     System.exit(0);
@@ -91,9 +93,9 @@ public class StorageController implements ISubject {
     }
 
     public String chooseFlavour() throws IllegalArgumentException {
-        String isFlavoured = prompter.getUserInput(prompter.promptOrderOptions2);
+        String isFlavoured = Prompt.getUserInput(storagePrompter.getNeedFlavourOptions());
         if(isFlavoured.toLowerCase().equals("y")) {
-            switch (prompter.getUserInput(prompter.promptOrderOptions3)) {
+            switch (Prompt.getUserInput(storagePrompter.getFlavourOptions())) {
                 case "1":
                     return "vanillaflavour";
                 case "2":
@@ -111,7 +113,7 @@ public class StorageController implements ISubject {
     }
 
     public String chooseCoffeeType() throws IllegalArgumentException {
-        String coffeeType = prompter.getUserInput(prompter.promptOrderOptions1);
+        String coffeeType = Prompt.getUserInput(storagePrompter.getCoffeeOptions());
         if(coffeeType.equals("1")) {
             return "Espresso";
         }else if (coffeeType.equals("2")) {
@@ -132,7 +134,7 @@ public class StorageController implements ISubject {
         Coffee coffee = storage.getCoffeeByType((flavour != null) ? flavour : coffeeType);
         String response = "Coffee was ordered for: $" + numberFormat.format(coffee.getCost());
         removeCoffeeFromStorage(coffee);
-        prompter.promptOutput(response);
+        Prompt.promptOutput(response);
     }
 
     public void setPrice(String coffeeType, String flavour, double price) throws Exception {
